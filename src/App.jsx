@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import Chat from "./components/Chat"
 import './App.css'
 
 function App() {
@@ -7,7 +7,8 @@ function App() {
 
     return (
         <div className="App">
-            <h1> Vite + React </h1>
+            <h2> chat room </h2>
+            <Chat/>
         </div>
     )
 }
