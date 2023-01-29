@@ -11,7 +11,7 @@ function harperGetMessages(room) {
     });
 
     let config = {
-        method: 'post',
+        method: 'get',
         url: dbUrl,
         headers: {
             'Content-Type': 'application/json',
