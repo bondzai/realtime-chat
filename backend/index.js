@@ -20,15 +20,30 @@ app.get('/', (req, res) => {
 const CHAT_BOT = 'ChatBot';
 io.on('connection', (socket) => {
     console.log(`User connected ${socket.id}`);
+    let chatRoom = '';
+    let allUsers = [];
 
-    // Add a user to a room
     socket.on('join_room', (data) => {
-        const { username, room } = data; // Data sent from client when join_room event emitted
-        socket.join(room); // Join the user to a socket room
+        const { username, room } = data;
+        socket.join(room);
+        chatRoom = room;
 
-        // Add this
-        let __createdtime__ = Date.now(); // Current timestamp
-        // Send message to all users currently in the room, apart from the user that just joined
+        console.log("[room]" + room)
+        console.log("[chatRoom]" + chatRoom)
+        
+        allUsers.push({ id: socket.id, username, room });
+        chatRoomUsers = allUsers.filter((user) => user.room === room);
+        socket.to(room).emit('chatroom_users', chatRoomUsers);
+        socket.emit('chatroom_users', chatRoomUsers);
+        
+        let __createdtime__ = Date.now();
+        
+        socket.emit('receive_message', {
+            message: `Welcome ${username}`,
+            username: CHAT_BOT,
+            __createdtime__,
+          });
+
         socket.to(room).emit('receive_message', {
             message: `${username} has joined the chat room`,
             username: CHAT_BOT,
